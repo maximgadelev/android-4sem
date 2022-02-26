@@ -40,7 +40,7 @@ class SearchFragment:Fragment(R.layout.fragment_search) {
             try {
                 val city = binding?.etSearch?.text.toString()
                 if (binding?.etSearch?.length()==0){
-                   Toast.makeText(context,"123",Toast.LENGTH_LONG).show()
+                   Toast.makeText(context,"Ввведите городочек",Toast.LENGTH_LONG).show()
                 } else {
                     val response = repository.getWeatherByCity(city)
                     idCity=response.id

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">web-app</string>
+    <string name="clouds">Clouds</string>
+    <string name="wind">Wind</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="directions">Direction</string>
 </resources>

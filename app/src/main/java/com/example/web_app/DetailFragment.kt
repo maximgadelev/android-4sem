@@ -9,9 +9,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.web_app.databinding.FragmentDetailBinding
 import com.example.web_app.response.WeatherResponse
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 
 class DetailFragment:Fragment(R.layout.fragment_detail) {
-    var response:WeatherResponse?=null
     private val repository by lazy {
         WeatherRepository()
     }
@@ -32,8 +32,29 @@ class DetailFragment:Fragment(R.layout.fragment_detail) {
     }
     private fun getWeather(id:Int){
         lifecycleScope.launch {
-             response=repository.getWeatherById(id)
+             var response=repository.getWeatherById(id)
             binding?.tvCity?.text=response?.name
+            binding?.tvHumidity?.text=response?.main?.humidity.toString() + "%"
+            binding?.tvMaxTemp?.text=response?.main?.tempMax.toString()  +  "C"
+            binding?.tvMinTemp?.text=response?.main?.tempMin.toString()  + "C"
+            binding?.tvDirect?.text=when(response.wind.deg){
+                in 0..22 -> "N"
+                in 23..67 -> "N-E"
+                in 68..112 -> "E"
+                in 113..157 -> "S-E"
+                in 158..202 -> "S"
+                in 203..247 -> "S-W"
+                in 248..292 -> "S"
+                in 293..337 -> "N-W"
+                in 337..361 -> "N"
+                else -> "4to-t0 ne to"
+            }
+            getTime(response)
         }
+    }
+    private  fun getTime(response: WeatherResponse){
+        binding?.tvDate?.text=SimpleDateFormat("HH:mm").format(response.dt*1000)
+        binding?.tvSunrise?.text= SimpleDateFormat("HH:mm").format(response.sys.sunrise*1000)
+        binding?.tvSunset?.text= SimpleDateFormat("HH:mm").format(response.sys.sunset*1000)
     }
 }

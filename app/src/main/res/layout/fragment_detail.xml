@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal">
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/gradient">
 
 
     <ImageView
         android:id="@+id/iv_weatherImage"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:src="@drawable/ic_baseline_bedtime_24"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:src="@drawable/cityscape" />
 
     <TextView
         android:id="@+id/temp_tv"
@@ -32,8 +33,11 @@
         android:id="@+id/tv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       android:layout_below="@id/temp_tv"
+        android:layout_below="@id/temp_tv"
         android:layout_centerHorizontal="true"
+        android:text="Weather for"
+        android:fontFamily="sans-serif-smallcaps"
+        android:textColor="@color/white"
         android:textSize="17sp" />
 
     <TextView
@@ -42,155 +46,222 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_description"
         android:layout_centerHorizontal="true"
-        android:drawableStart="@drawable/ic_baseline_location_on_black_24dp"
+        android:drawableStart="@drawable/geolocation"
         android:fontFamily="sans-serif-smallcaps"
         android:text="zalupka"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textSize="48sp"
         android:textStyle="normal" />
 
     <TextView
         android:id="@+id/tv_date"
-        android:text="12:13:14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/tv_city"
-        android:textSize="15sp"
-        android:textStyle="normal"
-        />
+        android:layout_centerHorizontal="true"
+        android:text="123"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="normal" />
 
     <LinearLayout
         android:id="@+id/linLay1"
-        android:orientation="horizontal"
-        android:layout_below="@id/tv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2"
-        android:layout_marginRight="30dp"
+        android:layout_below="@id/tv_date"
         android:layout_marginLeft="30dp"
-        >
+        android:layout_marginRight="30dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
         <TextView
-            android:gravity="end"
-            android:layout_weight="1"
-            android:id="@+id/tv_sunrise"
+            android:id="@+id/tv_maxTemp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textStyle="normal"
-            android:textColor="@color/black"/>
-        <TextView
-            android:gravity="start"
             android:layout_weight="1"
-            android:id="@+id/tv_sunset"
+            android:layout_marginTop="30dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center"
+            android:text="123"
+            android:textColor="@color/white"
+            android:textSize="32dp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tv_minTemp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textStyle="normal"
-            android:textColor="@color/black"/>
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center"
+            android:text="123"
+            android:layout_marginTop="30dp"
+            android:textSize="32dp"
+            android:textColor="@color/white"
+            android:textStyle="" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linLay2"
-        android:orientation="horizontal"
-        android:layout_below="@id/tv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="3"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="40dp"
+        android:layout_below="@id/tv_date"
         android:layout_marginLeft="40dp"
-        >
+        android:layout_marginTop="160dp"
+        android:layout_marginRight="40dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
 
         <LinearLayout
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
-            >
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:drawableTop="@drawable/humidity"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Humidity"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_humidity"
+                android:layout_width="81dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center"
+                android:text="123"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_bedtime_24"
-                android:textStyle="normal"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:padding="5dp"
-                />
+                android:drawableTop="@drawable/preassure"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Pressure"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
             <TextView
                 android:id="@+id/pressure_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="82dp"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_bedtime_24"
-                android:textStyle="normal"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:padding="5dp"
-                />
+                android:text="123"
+                android:textColor="@color/white"
+                android:textStyle="normal" />
+
         </LinearLayout>
 
-
         <LinearLayout
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/tv_clouds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_bedtime_24"
-                android:textStyle="normal"
+                android:drawableTop="@drawable/north"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="@string/directions"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_direct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:padding="5dp"
-                />
+                android:text="123"
+                android:textColor="@color/white"
+                android:textStyle="normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/wind"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="@string/wind"
+                android:textColor="@color/white"
+
+                android:textSize="20sp" />
+
             <TextView
                 android:id="@+id/tv_wind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_bedtime_24"
-                android:textStyle="normal"
-                android:text="123"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:padding="5dp"
-                />
+                android:text="123"
+                android:textColor="@color/white"
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
-            >
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/tv_maxTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_bedtime_24"
-                android:text=""
-                android:textStyle="normal"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:padding="5dp"
-                />
+                android:drawableTop="@drawable/sunrise"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="@string/sunrise"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
             <TextView
-                android:id="@+id/tv_minTemp"
+                android:id="@+id/tv_sunrise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_bedtime_24"
-                android:text=""
-                android:textStyle="normal"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:padding="5dp"
-                />
+                android:text="123"
+                android:textColor="@color/white"
+                android:textStyle="normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/sunset"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="@string/sunset"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_sunset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center"
+                android:text="123"
+                android:textColor="@color/white"
+                android:textStyle="normal" />
         </LinearLayout>
 
     </LinearLayout>
