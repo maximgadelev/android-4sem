@@ -1,6 +1,7 @@
 package com.example.web_app
 
 import androidx.viewbinding.BuildConfig
+import com.example.web_app.response.WeatherList
 import com.example.web_app.response.WeatherResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -57,5 +58,8 @@ class WeatherRepository {
     }
     suspend fun getWeatherById(id: Int): WeatherResponse {
         return api.getWeatherById(id)
+    }
+    suspend fun getWeatherList(latitude: Double?, longitude: Double?, count:Int):WeatherList{
+        return api.getWeatherList(latitude,longitude,count)
     }
 }
