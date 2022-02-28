@@ -1,20 +1,19 @@
-package com.example.web_app
+package com.example.web_app.adapter
 
-import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.web_app.response.WeatherList
+import com.example.web_app.R
+import com.example.web_app.data.response.WeatherList
 
 
 class WeatherAdapter(
-    private var weatherList:WeatherList,
+    private var weatherList: WeatherList,
     private val action: (Int) -> Unit
-): RecyclerView.Adapter<WeatherAdapter.WeatherHolder>() {
+) : RecyclerView.Adapter<WeatherAdapter.WeatherHolder>() {
     class WeatherHolder(
         itemView: View,
         private val action: (Int) -> Unit
@@ -23,9 +22,9 @@ class WeatherAdapter(
         private val tvTown: TextView = itemView.findViewById(R.id.tv_town_rv)
 
         fun bind(response: WeatherList.WeatherResponse) {
-            tvTemp.text = response.main.temp.toString()+"°С"
+            tvTemp.text = response.main.temp.toString() + "°С"
             tvTown.text = response.name
-            colorizeTemp(response.main.temp,tvTemp,itemView)
+            colorizeTemp(response.main.temp, tvTemp, itemView)
             itemView.setOnClickListener {
                 action(response.id)
             }
@@ -39,39 +38,40 @@ class WeatherAdapter(
                 in 10.0..20.0 -> textView.setTextColor(
                     ContextCompat.getColor(itemView.context, R.color.temperature_10),
 
-                )
+                    )
                 in 0.0..10.0 -> textView.setTextColor(
                     ContextCompat.getColor(itemView.context, R.color.temperature_0),
 
-                )
-                in -10.0..0.0->textView.setTextColor(
+                    )
+                in -10.0..0.0 -> textView.setTextColor(
                     ContextCompat.getColor(itemView.context, R.color.temperatureCold_10),
 
-                )
-                in -20.0..-10.0 ->textView.setTextColor(
+                    )
+                in -20.0..-10.0 -> textView.setTextColor(
                     ContextCompat.getColor(itemView.context, R.color.temperatureCold_20),
 
-                )
-                in -50.0..-20.0 ->textView.setTextColor(
+                    )
+                in -50.0..-20.0 -> textView.setTextColor(
                     ContextCompat.getColor(itemView.context, R.color.temperatureCold_50),
 
-                )
+                    )
             }
 
         }
     }
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherHolder {
-            return WeatherHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.weather_item, parent, false), action
-            )
-        }
 
-        override fun onBindViewHolder(holder: WeatherHolder, position: Int) {
-            holder.bind(weatherList.list[position])
-        }
-
-        override fun getItemCount(): Int = weatherList.list.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherHolder {
+        return WeatherHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.weather_item, parent, false), action
+        )
     }
+
+    override fun onBindViewHolder(holder: WeatherHolder, position: Int) {
+        holder.bind(weatherList.list[position])
+    }
+
+    override fun getItemCount(): Int = weatherList.list.size
+}
 
 

@@ -1,8 +1,9 @@
-package com.example.web_app
+package com.example.web_app.data
 
 import androidx.viewbinding.BuildConfig
-import com.example.web_app.response.WeatherList
-import com.example.web_app.response.WeatherResponse
+import com.example.web_app.data.api.Api
+import com.example.web_app.data.response.WeatherList
+import com.example.web_app.data.response.WeatherResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -13,7 +14,8 @@ private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 private const val API_KEY = "9e8331105a420290e0619d9769c5dc65"
 private const val QUERY_API_KEY = "appid"
 
-class WeatherRepository {
+class
+WeatherRepository {
 
     private val apiKeyInterceptor = Interceptor { chain ->
         val original = chain.request()
@@ -59,7 +61,7 @@ class WeatherRepository {
     suspend fun getWeatherById(id: Int): WeatherResponse {
         return api.getWeatherById(id)
     }
-    suspend fun getWeatherList(latitude: Double?, longitude: Double?, count:Int):WeatherList{
+    suspend fun getWeatherList(latitude: Double?, longitude: Double?, count:Int): WeatherList {
         return api.getWeatherList(latitude,longitude,count)
     }
 }

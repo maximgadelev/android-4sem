@@ -1,4 +1,5 @@
-package com.example.web_app.response
+package com.example.web_app.data.response
+
 import com.google.gson.annotations.SerializedName
 
 
@@ -12,7 +13,7 @@ data class WeatherList(
     @SerializedName("message")
     val message: String
 ) {
-    data class WeatherResponse (
+    data class WeatherResponse(
         @SerializedName("clouds")
         val clouds: Clouds,
         @SerializedName("coord")
