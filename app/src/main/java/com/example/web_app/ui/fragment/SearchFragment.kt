@@ -22,13 +22,16 @@ import com.example.web_app.adapter.WeatherAdapter
 import com.example.web_app.data.WeatherRepository
 import com.example.web_app.databinding.FragmentSearchBinding
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
+    private final val CONST_LONGITUDE = 10.34
+    private final val CONST_LATITUDE = 12.35
     val bundle = Bundle()
     var idCity: Int = 0
-    private var changingLongitude: Double? = null ?: 10.0
-    private var changingLatitude: Double? = null ?: 10.0
+    private var changingLongitude: Double? = null
+    private var changingLatitude: Double? = null
     private lateinit var locationClient: FusedLocationProviderClient
 
     private var mRecyclerView: RecyclerView? = null
@@ -48,8 +51,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mRecyclerView = view.findViewById(R.id.rv_weather_list)
         setupLocation()
+        mRecyclerView = view.findViewById(R.id.rv_weather_list)
         initSearch()
 
     }
@@ -98,6 +101,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun initRecyclerView() {
+        if (changingLatitude == null || changingLongitude == null) {
+            changingLatitude = CONST_LATITUDE
+            changingLongitude = CONST_LONGITUDE
+        }
         mRecyclerView?.run {
             lifecycleScope.launch {
                 adapter = WeatherAdapter(
@@ -122,7 +129,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     try {
                         val queryWeather = repository.getWeatherByCity(query)
                         idCity = queryWeather.id
-
                         bundle.putInt("id", idCity)
                         findNavController().navigate(
                             R.id.action_searchFragment_to_detailFragment,
