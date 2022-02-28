@@ -5,32 +5,18 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ti_search"
-        android:layout_width="0dp"
-        android:background="@drawable/rounded_text_view"
-        android:layout_height="40dp"
-        android:layout_marginEnd="48dp"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toTopOf="@id/guideline_top"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-        />
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/et_search"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/white"
-        android:hint="Введите город"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/black"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toStartOf="@id/ti_search"
-        app:layout_constraintTop_toTopOf="@id/ti_search"
-        app:layout_constraintEnd_toEndOf="@id/ti_search"
-        app:layout_constraintBottom_toBottomOf="@id/ti_search"
-        />
-<androidx.constraintlayout.widget.Guideline
+  <SearchView
+      android:id="@+id/searchView"
+      android:layout_width="0dp"
+      android:layout_height="40dp"
+      android:iconifiedByDefault="false"
+      android:background="@drawable/my_border"
+      android:queryHint="Введите город"
+      app:layout_constraintEnd_toEndOf="@id/guideline_right"
+      app:layout_constraintStart_toStartOf="@id/guideline_left"
+     app:layout_constraintTop_toTopOf="@id/guideline_top"/>
+
+    <androidx.constraintlayout.widget.Guideline
     android:id="@+id/guideline_left"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -59,20 +45,9 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@+id/ti_search"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
         tools:listitem="@layout/weather_item"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fb_search"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-       android:backgroundTint="@color/white"
-        app:backgroundTint="@color/white"
-        app:fabCustomSize="40dp"
-        android:src="@drawable/ic_baseline_search_24"
-        app:layout_constraintBottom_toBottomOf="@id/ti_search"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-        app:layout_constraintTop_toTopOf="@id/guideline_top" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,4 +5,7 @@
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
     <string name="directions">Direction</string>
+    <string name="humidity">Humidity</string>
+    <string name="weather_for">Weather for</string>
+    <string name="pressure">Pressure</string>
 </resources>

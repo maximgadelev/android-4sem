@@ -37,14 +37,14 @@ class DetailFragment:Fragment(R.layout.fragment_detail) {
         }
     }
     private  fun setWeathersProperties(response: WeatherResponse){
-        binding?.tvDate?.text=SimpleDateFormat("HH:mm").format(response.dt*1000)
+        binding?.tvTemp?.text=response.main.temp.toString()+ "°С"
         binding?.tvSunrise?.text= SimpleDateFormat("HH:mm").format(response.sys.sunrise*1000)
         binding?.tvSunset?.text= SimpleDateFormat("HH:mm").format(response.sys.sunset*1000)
         binding?.tvCity?.text=response.name
         binding?.pressureTv?.text=response.main.pressure.toString() + "PA"
         binding?.tvHumidity?.text=response.main.humidity.toString() + "%"
-        binding?.tvMaxTemp?.text=   "Max temp " + response.main.tempMax.toString()  +  "С°"
-        binding?.tvMinTemp?.text="Min temp "+response.main.tempMin.toString()  + "С°"
+        binding?.tvMaxTemp?.text=   "Max temp " + response.main.tempMax.toString()  +  "°С"
+        binding?.tvMinTemp?.text="Min temp "+response.main.tempMin.toString()  + "°С"
         binding?.tvWind?.text=response.wind.speed.toString() + "m/s"
         binding?.tvDirect?.text=when(response.wind.deg){
             in 0..22 -> "N"

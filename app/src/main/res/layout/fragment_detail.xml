@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
@@ -18,9 +18,9 @@
 
     <TextView
         android:id="@+id/temp_tv"
-        android:layout_below="@+id/iv_weatherImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_weatherImage"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="75dp"
@@ -34,8 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/temp_tv"
         android:layout_centerHorizontal="true"
-        android:text="Weather for"
         android:fontFamily="sans-serif-smallcaps"
+        android:text="@string/weather_for"
         android:textColor="@color/white"
         android:textSize="17sp" />
 
@@ -47,18 +47,16 @@
         android:layout_centerHorizontal="true"
         android:drawableStart="@drawable/geolocation"
         android:fontFamily="sans-serif-smallcaps"
-        android:text="zalupka"
         android:textColor="@color/white"
         android:textSize="48sp"
         android:textStyle="normal" />
 
     <TextView
-        android:id="@+id/tv_date"
+        android:id="@+id/tv_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_city"
         android:layout_centerHorizontal="true"
-        android:text="123"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="normal" />
@@ -67,7 +65,7 @@
         android:id="@+id/linLay1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_date"
+        android:layout_below="@id/tv_temp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:orientation="horizontal"
@@ -77,26 +75,24 @@
             android:id="@+id/tv_maxTemp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="30dp"
+            android:layout_weight="1"
             android:fontFamily="sans-serif-smallcaps"
             android:gravity="center"
-            android:text="123"
             android:textColor="@color/white"
-            android:textSize="32dp"
+            android:textSize="32sp"
             android:textStyle="normal" />
 
         <TextView
             android:id="@+id/tv_minTemp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-smallcaps"
             android:gravity="center"
-            android:text="123"
-            android:layout_marginTop="30dp"
-            android:textSize="32dp"
             android:textColor="@color/white"
+            android:textSize="32sp"
             android:textStyle="" />
     </LinearLayout>
 
@@ -104,7 +100,7 @@
         android:id="@+id/linLay2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_date"
+        android:layout_below="@id/tv_temp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="160dp"
         android:layout_marginRight="40dp"
@@ -124,11 +120,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:drawableTop="@drawable/humidity"
                 android:fontFamily="sans-serif-smallcaps"
-                android:text="Humidity"
+                android:text="@string/humidity"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:drawableTopCompat="@drawable/humidity" />
 
             <TextView
                 android:id="@+id/tv_humidity"
@@ -137,7 +133,6 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:text="123"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="normal" />
@@ -145,11 +140,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/preassure"
                 android:fontFamily="sans-serif-smallcaps"
-                android:text="Pressure"
+                android:text="@string/pressure"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:drawableTopCompat="@drawable/preassure" />
 
             <TextView
                 android:id="@+id/pressure_tv"
@@ -158,7 +153,6 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:text="123"
                 android:textColor="@color/white"
                 android:textStyle="normal" />
 
@@ -175,11 +169,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/north"
                 android:fontFamily="sans-serif-smallcaps"
                 android:text="@string/directions"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:drawableTopCompat="@drawable/north" />
 
             <TextView
                 android:id="@+id/tv_direct"
@@ -188,19 +182,18 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:text="123"
                 android:textColor="@color/white"
                 android:textStyle="normal" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/wind"
                 android:fontFamily="sans-serif-smallcaps"
                 android:text="@string/wind"
                 android:textColor="@color/white"
 
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:drawableTopCompat="@drawable/wind" />
 
             <TextView
                 android:id="@+id/tv_wind"
@@ -209,7 +202,6 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:text="123"
                 android:textColor="@color/white"
                 android:textStyle="normal" />
         </LinearLayout>
@@ -225,11 +217,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/sunrise"
                 android:fontFamily="sans-serif-smallcaps"
                 android:text="@string/sunrise"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:drawableTopCompat="@drawable/sunrise" />
 
             <TextView
                 android:id="@+id/tv_sunrise"
@@ -238,18 +230,17 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:text="123"
                 android:textColor="@color/white"
                 android:textStyle="normal" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/sunset"
                 android:fontFamily="sans-serif-smallcaps"
                 android:text="@string/sunset"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:drawableTopCompat="@drawable/sunset" />
 
             <TextView
                 android:id="@+id/tv_sunset"
@@ -258,7 +249,6 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
-                android:text="123"
                 android:textColor="@color/white"
                 android:textStyle="normal" />
         </LinearLayout>

@@ -9,4 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#807ffe</color>
     <color name="gradient">@drawable/gradient</color>
+    <color name="temperature_20">#F37D00</color>
+    <color name="temperature_10">#F3DE08</color>
+    <color name="temperature_0">#9BFA02</color>
+    <color name="temperatureCold_10">#51FFF0</color>
+    <color name="temperatureCold_20">#1492C4</color>
+    <color name="temperatureCold_50">#0C01A2</color>
 </resources>

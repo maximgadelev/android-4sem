@@ -1,11 +1,14 @@
 package com.example.web_app
+
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -19,11 +22,11 @@ import com.example.web_app.databinding.FragmentSearchBinding
 import kotlinx.coroutines.launch
 
 
-class SearchFragment:Fragment(R.layout.fragment_search) {
-    val bundle=Bundle()
-    var idCity:Int = 0
-    private var changingLongitude: Double?=null?:10.0
-    private var changingLatitude: Double? = null?:10.0
+class SearchFragment : Fragment(R.layout.fragment_search) {
+    val bundle = Bundle()
+    var idCity: Int = 0
+    private var changingLongitude: Double? = null ?: 10.0
+    private var changingLatitude: Double? = null ?: 10.0
     private lateinit var locationClient: FusedLocationProviderClient
 
     private var mRecyclerView: RecyclerView? = null
@@ -45,29 +48,10 @@ class SearchFragment:Fragment(R.layout.fragment_search) {
         super.onViewCreated(view, savedInstanceState)
         mRecyclerView = view.findViewById(R.id.rv_weather_list)
         setupLocation()
-        binding?.fbSearch?.setOnClickListener {
-           getWeather()
-        }
+       initSearch()
 
     }
 
-    private fun getWeather() {
-        lifecycleScope.launch {
-            try {
-                val city = binding?.etSearch?.text.toString()
-                if (binding?.etSearch?.length()==0){
-                   Toast.makeText(context,"Ввведите городочек",Toast.LENGTH_LONG).show()
-                } else {
-                    val response = repository.getWeatherByCity(city)
-                    idCity=response.id
-                    bundle.putInt("id",idCity)
-                    findNavController().navigate(R.id.action_searchFragment_to_detailFragment,bundle)
-                }
-                } catch (ex: Exception) {
-                    Toast.makeText(context,"Данный город не найден",Toast.LENGTH_LONG).show()
-                }
-            }
-        }
     private fun setupLocation() {
         if (context?.let {
                 ActivityCompat.checkSelfPermission(
@@ -94,12 +78,13 @@ class SearchFragment:Fragment(R.layout.fragment_search) {
             }
         }
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        when(requestCode) {
+        when (requestCode) {
             100 -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setupLocation()
@@ -109,17 +94,52 @@ class SearchFragment:Fragment(R.layout.fragment_search) {
             }
         }
     }
-    private fun initRecyclerView(){
-       mRecyclerView?.run {
-            lifecycleScope.launch{
-                adapter=WeatherAdapter(
-                 repository.getWeatherList(changingLatitude,changingLongitude,10)
-                ){
-                    bundle.putInt("id",it)
-                    findNavController().navigate(R.id.action_searchFragment_to_detailFragment,bundle)
+
+    private fun initRecyclerView() {
+        mRecyclerView?.run {
+            lifecycleScope.launch {
+                adapter = WeatherAdapter(
+                    repository.getWeatherList(changingLatitude, changingLongitude, 10)
+                ) {
+                    bundle.putInt("id", it)
+                    findNavController().navigate(
+                        R.id.action_searchFragment_to_detailFragment,
+                        bundle
+                    )
                 }
             }
-            layoutManager = GridLayoutManager(context,2)
+            layoutManager = GridLayoutManager(context, 2)
         }
+    }
+
+
+    private fun initSearch(){
+        binding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                lifecycleScope.launch {
+                    try {
+                        val queryWeather = repository.getWeatherByCity(query)
+                        idCity=queryWeather.id
+
+                        bundle.putInt("id", idCity)
+                    findNavController().navigate(
+                        R.id.action_searchFragment_to_detailFragment,
+                        bundle)
+                    } catch (ex: Exception) {
+                        Toast.makeText(
+                            context,
+                            "Город не найден",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(query: String): Boolean {
+                return false
+            }
+})
     }
 }
