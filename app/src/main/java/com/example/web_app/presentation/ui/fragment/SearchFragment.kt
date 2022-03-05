@@ -1,4 +1,4 @@
-package com.example.web_app.ui.fragment
+package com.example.web_app.presentation.ui.fragment
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -18,14 +18,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.web_app.R
-import com.example.web_app.adapter.WeatherAdapter
-import com.example.web_app.data.WeatherRepository
+import com.example.web_app.presentation.ui.adapter.WeatherAdapter
+import com.example.web_app.data.WeatherRepositoryImpl
+import com.example.web_app.data.api.mapper.WeatherMapper
 import com.example.web_app.databinding.FragmentSearchBinding
+import com.example.web_app.di.DIContainer
+import com.example.web_app.domain.usecase.GetWeatherByCityUseCase
+import com.example.web_app.domain.usecase.GetWeatherListUseCase
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
+    private lateinit var getWeatherByCityUseCase: GetWeatherByCityUseCase
+    private lateinit var getWeatherListUseCase: GetWeatherListUseCase
     private final val CONST_LONGITUDE = 10.34
     private final val CONST_LATITUDE = 12.35
     val bundle = Bundle()
@@ -35,9 +40,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private lateinit var locationClient: FusedLocationProviderClient
 
     private var mRecyclerView: RecyclerView? = null
-    private val repository by lazy {
-        WeatherRepository()
-    }
 
     var binding: FragmentSearchBinding? = null;
     override fun onCreateView(
@@ -51,6 +53,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initObjects()
         setupLocation()
         mRecyclerView = view.findViewById(R.id.rv_weather_list)
         initSearch()
@@ -108,7 +111,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         mRecyclerView?.run {
             lifecycleScope.launch {
                 adapter = WeatherAdapter(
-                    repository.getWeatherList(changingLatitude, changingLongitude, 10)
+                    getWeatherListUseCase(changingLatitude, changingLongitude, 10)
                 ) {
                     bundle.putInt("id", it)
                     findNavController().navigate(
@@ -127,7 +130,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun onQueryTextSubmit(query: String): Boolean {
                 lifecycleScope.launch {
                     try {
-                        val queryWeather = repository.getWeatherByCity(query)
+                        val queryWeather = getWeatherByCityUseCase(query)
                         idCity = queryWeather.id
                         bundle.putInt("id", idCity)
                         findNavController().navigate(
@@ -150,5 +153,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 return false
             }
         })
+    }
+    fun initObjects(){
+        getWeatherByCityUseCase= GetWeatherByCityUseCase(
+            weatherRepository = WeatherRepositoryImpl(
+                api=DIContainer.api,
+                mapper = WeatherMapper()
+            )
+        )
+        getWeatherListUseCase=GetWeatherListUseCase(
+            WeatherRepositoryImpl(
+                api= DIContainer.api,
+                WeatherMapper()
+            )
+        )
     }
 }

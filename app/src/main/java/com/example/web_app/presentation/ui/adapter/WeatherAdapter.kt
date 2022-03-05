@@ -1,4 +1,4 @@
-package com.example.web_app.adapter
+package com.example.web_app.presentation.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +7,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.web_app.R
-import com.example.web_app.data.response.WeatherList
+import com.example.web_app.domain.entity.Weather
 
 
 class WeatherAdapter(
-    private var weatherList: WeatherList,
+    private var weatherList: List<Weather>,
     private val action: (Int) -> Unit
 ) : RecyclerView.Adapter<WeatherAdapter.WeatherHolder>() {
     class WeatherHolder(
@@ -21,10 +21,10 @@ class WeatherAdapter(
         private val tvTemp: TextView = itemView.findViewById(R.id.tv_temp_rv)
         private val tvTown: TextView = itemView.findViewById(R.id.tv_town_rv)
 
-        fun bind(response: WeatherList.WeatherResponse) {
-            tvTemp.text = response.main.temp.toString() + "°С"
+        fun bind(response: Weather) {
+            tvTemp.text = response.temp.toString() + "°С"
             tvTown.text = response.name
-            colorizeTemp(response.main.temp, tvTemp, itemView)
+            colorizeTemp(response.temp, tvTemp, itemView)
             itemView.setOnClickListener {
                 action(response.id)
             }
@@ -68,10 +68,10 @@ class WeatherAdapter(
     }
 
     override fun onBindViewHolder(holder: WeatherHolder, position: Int) {
-        holder.bind(weatherList.list[position])
+        holder.bind(weatherList[position])
     }
 
-    override fun getItemCount(): Int = weatherList.list.size
+    override fun getItemCount(): Int = weatherList.size
 }
 
 
