@@ -1,4 +1,4 @@
-package com.example.web_app.ui.fragment
+package com.example.web_app.presentation.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,16 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.web_app.R
-import com.example.web_app.data.WeatherRepository
+import com.example.web_app.data.WeatherRepositoryImpl
+import com.example.web_app.data.api.mapper.WeatherMapper
 import com.example.web_app.databinding.FragmentDetailBinding
-import com.example.web_app.data.response.WeatherResponse
+import com.example.web_app.di.DIContainer
+import com.example.web_app.domain.entity.Weather
+import com.example.web_app.domain.usecase.GetWeatherByIdUseCase
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
-    private val repository by lazy {
-        WeatherRepository()
-    }
+    private lateinit var getWeatherByIdUseCase: GetWeatherByIdUseCase
     var binding: FragmentDetailBinding? = null;
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,28 +30,29 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initObjects()
         val id = arguments?.getInt("id")
         id?.let { getWeather(it) }
     }
 
     private fun getWeather(id: Int) {
         lifecycleScope.launch {
-            val response = repository.getWeatherById(id)
+            val response = getWeatherByIdUseCase(id)
             setWeathersProperties(response)
         }
     }
 
-    private fun setWeathersProperties(response: WeatherResponse) {
-        binding?.tvTemp?.text = response.main.temp.toString() + "°С"
-        binding?.tvSunrise?.text = SimpleDateFormat("HH:mm").format(response.sys.sunrise * 1000)
-        binding?.tvSunset?.text = SimpleDateFormat("HH:mm").format(response.sys.sunset * 1000)
+    private fun setWeathersProperties(response: Weather) {
+        binding?.tvTemp?.text = response.temp.toString()
+        binding?.tvSunrise?.text = SimpleDateFormat("HH:mm").format(response.sunrise * 1000)
+        binding?.tvSunset?.text = SimpleDateFormat("HH:mm").format(response.sunset * 1000)
         binding?.tvCity?.text = response.name
-        binding?.pressureTv?.text = response.main.pressure.toString() + "PA"
-        binding?.tvHumidity?.text = response.main.humidity.toString() + "%"
-        binding?.tvMaxTemp?.text = "Max temp " + response.main.tempMax.toString() + "°С"
-        binding?.tvMinTemp?.text = "Min temp " + response.main.tempMin.toString() + "°С"
-        binding?.tvWind?.text = response.wind.speed.toString() + "m/s"
-        binding?.tvDirect?.text = when (response.wind.deg) {
+        binding?.pressureTv?.text = response.pressure.toString() + "PA"
+        binding?.tvHumidity?.text = response.humidity.toString() + "%"
+        binding?.tvMaxTemp?.text = "Max temp " + response.tempMax.toString() + "°С"
+        binding?.tvMinTemp?.text = "Min temp " + response.tempMin.toString() + "°С"
+        binding?.tvWind?.text = response.speed.toString() + "m/s"
+        binding?.tvDirect?.text = when (response.deg) {
             in 0..22 -> "N"
             in 23..67 -> "N-E"
             in 68..112 -> "E"
@@ -62,5 +64,13 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             in 337..361 -> "N"
             else -> "4to-t0 ne to"
         }
+    }
+    fun initObjects(){
+        getWeatherByIdUseCase= GetWeatherByIdUseCase(
+            weatherRepository = WeatherRepositoryImpl(
+                api=DIContainer.api,
+                mapper = WeatherMapper()
+            )
+        )
     }
 }

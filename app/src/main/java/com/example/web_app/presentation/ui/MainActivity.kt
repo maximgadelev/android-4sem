@@ -1,4 +1,4 @@
-package com.example.web_app.ui
+package com.example.web_app.presentation.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
