@@ -11,6 +11,7 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import androidx.lifecycle.lifecycleScope
@@ -18,28 +19,27 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.web_app.R
+import com.example.web_app.ViewModelFactory
 import com.example.web_app.presentation.ui.adapter.WeatherAdapter
-import com.example.web_app.data.WeatherRepositoryImpl
-import com.example.web_app.data.api.mapper.WeatherMapper
 import com.example.web_app.databinding.FragmentSearchBinding
 import com.example.web_app.di.DIContainer
 import com.example.web_app.domain.usecase.GetWeatherByCityUseCase
-import com.example.web_app.domain.usecase.GetWeatherListUseCase
+import com.example.web_app.presentation.viewModel.SearchFragmentViewModel
 import kotlinx.coroutines.launch
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private lateinit var getWeatherByCityUseCase: GetWeatherByCityUseCase
-    private lateinit var getWeatherListUseCase: GetWeatherListUseCase
-    private final val CONST_LONGITUDE = 10.34
-    private final val CONST_LATITUDE = 12.35
+    private val CONST_LONGITUDE = 10.34
+    private  val CONST_LATITUDE = 12.35
     val bundle = Bundle()
     var idCity: Int = 0
-    private var changingLongitude: Double? = null
-    private var changingLatitude: Double? = null
+    private var changingLongitude: Double=CONST_LONGITUDE
+    private var changingLatitude: Double=CONST_LATITUDE
     private lateinit var locationClient: FusedLocationProviderClient
-
+    private lateinit var viewModel: SearchFragmentViewModel
     private var mRecyclerView: RecyclerView? = null
+    private var weatherAdapter:WeatherAdapter? = null
 
     var binding: FragmentSearchBinding? = null;
     override fun onCreateView(
@@ -48,16 +48,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
+
         return binding?.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initObjects()
+        initFactory()
+        initObservers()
         setupLocation()
         mRecyclerView = view.findViewById(R.id.rv_weather_list)
+        mRecyclerView?.layoutManager=GridLayoutManager(context, 2)
         initSearch()
-
     }
 
     private fun setupLocation() {
@@ -73,16 +74,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             )
             requestPermissions(permissions, 100)
         } else {
-            locationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+            locationClient=LocationServices.getFusedLocationProviderClient(requireActivity())
             locationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                changingLatitude = location?.latitude
-                changingLongitude = location?.longitude
-                initRecyclerView()
                 if (location != null) {
-                    Toast.makeText(context, "Локация обнаружена", Toast.LENGTH_SHORT).show()
+                    changingLongitude = location.longitude
+                    changingLatitude = location.latitude
+                    Toast.makeText(context, "Локация найдена", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(context, "Локация ne обнаружена", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Локация не найдена", Toast.LENGTH_LONG).show()
                 }
+                viewModel.getWeatherList(changingLatitude,changingLongitude)
             }
         }
     }
@@ -103,69 +104,63 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun initRecyclerView() {
-        if (changingLatitude == null || changingLongitude == null) {
-            changingLatitude = CONST_LATITUDE
-            changingLongitude = CONST_LONGITUDE
-        }
-        mRecyclerView?.run {
-            lifecycleScope.launch {
-                adapter = WeatherAdapter(
-                    getWeatherListUseCase(changingLatitude, changingLongitude, 10)
-                ) {
-                    bundle.putInt("id", it)
-                    findNavController().navigate(
-                        R.id.action_searchFragment_to_detailFragment,
-                        bundle
-                    )
-                }
-            }
-            layoutManager = GridLayoutManager(context, 2)
-        }
-    }
-
 
     private fun initSearch() {
-        binding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding?.searchView?.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                lifecycleScope.launch {
-                    try {
-                        val queryWeather = getWeatherByCityUseCase(query)
-                        idCity = queryWeather.id
-                        bundle.putInt("id", idCity)
-                        findNavController().navigate(
-                            R.id.action_searchFragment_to_detailFragment,
-                            bundle
-                        )
-                    } catch (ex: Exception) {
-                        Toast.makeText(
-                            context,
-                            "Город не найден",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
+                    lifecycleScope.launch {
+                        viewModel.getWeatherForCity(query)
                 }
-                return false
-            }
-
+                    return false
+                }
             override fun onQueryTextChange(query: String): Boolean {
                 return false
             }
         })
     }
-    fun initObjects(){
-        getWeatherByCityUseCase= GetWeatherByCityUseCase(
-            weatherRepository = WeatherRepositoryImpl(
-                api=DIContainer.api,
-                mapper = WeatherMapper()
-            )
-        )
-        getWeatherListUseCase=GetWeatherListUseCase(
-            WeatherRepositoryImpl(
-                api= DIContainer.api,
-                WeatherMapper()
-            )
-        )
+
+    fun initObservers(){
+        viewModel.weatherList.observe(viewLifecycleOwner){ list ->
+            list.fold(onSuccess = {
+             weatherAdapter=WeatherAdapter(
+                 it
+             ) {
+                 bundle.putInt("id", it)
+                 findNavController().navigate(
+                     R.id.action_searchFragment_to_detailFragment,
+                     bundle
+                 )
+             }
+                mRecyclerView?.adapter=weatherAdapter
+           },onFailure = {
+               Toast.makeText(context,"123",Toast.LENGTH_LONG)
+           }
+           )
+        }
+
+        viewModel.weather.observe(viewLifecycleOwner){ city ->
+            city.fold(onSuccess = {
+                bundle.putInt("id", it.id)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_detailFragment,
+                    bundle
+                )
+            },onFailure = {
+                Toast.makeText(
+                    context,
+                    "Город не найден",
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
+        }
     }
+    private fun initFactory() {
+        val factory = ViewModelFactory(DIContainer)
+        viewModel = ViewModelProvider(
+            this,
+            factory
+        )[SearchFragmentViewModel::class.java]
+    }
+
 }

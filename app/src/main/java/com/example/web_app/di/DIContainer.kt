@@ -1,7 +1,14 @@
 package com.example.web_app.di
 
 import androidx.viewbinding.BuildConfig
+import com.example.web_app.data.WeatherRepositoryImpl
 import com.example.web_app.data.api.Api
+import com.example.web_app.data.api.mapper.WeatherMapper
+import com.example.web_app.domain.WeatherRepository
+import com.example.web_app.domain.usecase.GetWeatherByCityUseCase
+import com.example.web_app.domain.usecase.GetWeatherByIdUseCase
+import com.example.web_app.domain.usecase.GetWeatherListUseCase
+import kotlinx.coroutines.Dispatchers
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -67,4 +74,17 @@ object DIContainer {
             .build()
             .create(Api::class.java)
     }
+    val weatherRepository:WeatherRepository=WeatherRepositoryImpl(
+        api = api,
+        mapper = WeatherMapper()
+    )
+    val getWeatherListUseCase:GetWeatherListUseCase= GetWeatherListUseCase(
+        weatherRepository = weatherRepository
+    )
+    val getWeatherByCityUseCase:GetWeatherByCityUseCase= GetWeatherByCityUseCase(
+        weatherRepository= weatherRepository
+    )
+    val getWeatherByIdUseCase:GetWeatherByIdUseCase= GetWeatherByIdUseCase(
+        weatherRepository= weatherRepository
+    )
 }

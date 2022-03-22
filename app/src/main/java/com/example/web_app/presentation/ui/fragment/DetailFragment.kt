@@ -1,24 +1,29 @@
 package com.example.web_app.presentation.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.web_app.R
+import com.example.web_app.ViewModelFactory
 import com.example.web_app.data.WeatherRepositoryImpl
 import com.example.web_app.data.api.mapper.WeatherMapper
 import com.example.web_app.databinding.FragmentDetailBinding
 import com.example.web_app.di.DIContainer
 import com.example.web_app.domain.entity.Weather
 import com.example.web_app.domain.usecase.GetWeatherByIdUseCase
+import com.example.web_app.presentation.viewModel.DetailFragmentViewModel
+import com.example.web_app.presentation.viewModel.SearchFragmentViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
-    private lateinit var getWeatherByIdUseCase: GetWeatherByIdUseCase
-    var binding: FragmentDetailBinding? = null;
+    var binding: FragmentDetailBinding? = null
+    private lateinit var viewModel: DetailFragmentViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,15 +35,15 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initObjects()
+        initFactory()
+        initObservers()
         val id = arguments?.getInt("id")
         id?.let { getWeather(it) }
     }
 
     private fun getWeather(id: Int) {
         lifecycleScope.launch {
-            val response = getWeatherByIdUseCase(id)
-            setWeathersProperties(response)
+          viewModel.getWeatherById(id)
         }
     }
 
@@ -65,12 +70,20 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             else -> "4to-t0 ne to"
         }
     }
-    fun initObjects(){
-        getWeatherByIdUseCase= GetWeatherByIdUseCase(
-            weatherRepository = WeatherRepositoryImpl(
-                api=DIContainer.api,
-                mapper = WeatherMapper()
-            )
-        )
+   fun initObservers(){
+       viewModel.weather.observe(viewLifecycleOwner){
+           it.fold(onSuccess ={
+               setWeathersProperties(it)
+           },onFailure ={
+               Log.e("Error","error")
+           })
+       }
+   }
+    fun initFactory(){
+        val factory = ViewModelFactory(DIContainer)
+        viewModel = ViewModelProvider(
+            this,
+            factory
+        )[DetailFragmentViewModel::class.java]
     }
 }
