@@ -1,6 +1,5 @@
 package com.example.web_app.domain
 
-import com.example.web_app.data.response.WeatherList
 import com.example.web_app.domain.entity.Weather
 
 interface WeatherRepository {
