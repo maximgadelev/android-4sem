@@ -7,8 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.web_app.domain.entity.Weather
 import com.example.web_app.domain.usecase.GetWeatherByIdUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailFragmentViewModel(
+class DetailFragmentViewModel @Inject constructor(
     private val getWeatherByIdUseCase: GetWeatherByIdUseCase
 ):ViewModel() {
     private var _weather: MutableLiveData<Result<Weather>> = MutableLiveData()

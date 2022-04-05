@@ -6,7 +6,6 @@ import android.view.ViewGroup
 
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.web_app.R
 import com.example.web_app.domain.entity.Weather
