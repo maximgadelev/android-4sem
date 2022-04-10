@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.web_app.domain.entity.Weather
 import com.example.web_app.domain.usecase.GetWeatherByCityUseCase
 import com.example.web_app.domain.usecase.GetWeatherListUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SearchFragmentViewModel @Inject constructor(
     private val getWeatherListUseCase: GetWeatherListUseCase,
     private val getWeatherByCityUseCase: GetWeatherByCityUseCase

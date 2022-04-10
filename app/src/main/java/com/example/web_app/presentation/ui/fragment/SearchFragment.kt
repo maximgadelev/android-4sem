@@ -17,16 +17,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.web_app.R
-import com.example.web_app.AppViewModelFactory
 import com.example.web_app.databinding.FragmentSearchBinding
-import com.example.web_app.presentation.ui.MainActivity
 import com.example.web_app.presentation.ui.adapter.WeatherAdapter
 import com.example.web_app.presentation.viewModel.SearchFragmentViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val CONST_LONGITUDE = 10.34
     private val CONST_LATITUDE = 12.35
@@ -36,17 +36,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var changingLatitude: Double = CONST_LATITUDE
     private lateinit var locationClient: FusedLocationProviderClient
 
-    @Inject
-    lateinit var factoryApp: AppViewModelFactory
-    private val viewModel: SearchFragmentViewModel by viewModels {
-        factoryApp
-    }
+    private val viewModel: SearchFragmentViewModel by viewModels()
+
     private var mRecyclerView: RecyclerView? = null
     private var weatherAdapter: WeatherAdapter? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        (activity as MainActivity).appComponent.inject(this)
-        super.onCreate(savedInstanceState)
-    }
+
     var binding: FragmentSearchBinding? = null;
     override fun onCreateView(
         inflater: LayoutInflater,

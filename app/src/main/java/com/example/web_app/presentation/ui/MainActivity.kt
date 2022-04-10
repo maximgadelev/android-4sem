@@ -6,15 +6,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.web_app.App
 import com.example.web_app.R
-import com.example.web_app.di.AppComponent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    lateinit var appComponent: AppComponent
 
     private lateinit var controller: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
-        appComponent = (application as App).appComponent
-        appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         controller =
