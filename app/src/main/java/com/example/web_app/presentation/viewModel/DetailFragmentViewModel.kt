@@ -6,15 +6,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.web_app.domain.entity.Weather
 import com.example.web_app.domain.usecase.GetWeatherByIdUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class DetailFragmentViewModel @Inject constructor(
     private val getWeatherByIdUseCase: GetWeatherByIdUseCase
-):ViewModel() {
+) : ViewModel() {
     private var _weather: MutableLiveData<Result<Weather>> = MutableLiveData()
     val weather: LiveData<Result<Weather>> = _weather
-    fun getWeatherById(id:Int) {
+    fun getWeatherById(id: Int) {
         viewModelScope.launch {
             try {
                 val weather = getWeatherByIdUseCase(id)

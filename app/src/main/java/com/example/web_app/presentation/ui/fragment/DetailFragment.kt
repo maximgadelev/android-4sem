@@ -9,21 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.web_app.R
-import com.example.web_app.AppViewModelFactory
 import com.example.web_app.databinding.FragmentDetailBinding
 import com.example.web_app.domain.entity.Weather
-import com.example.web_app.presentation.ui.MainActivity
 import com.example.web_app.presentation.viewModel.DetailFragmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetailFragment : Fragment(R.layout.fragment_detail) {
-    @Inject
-    lateinit var factoryApp: AppViewModelFactory
+
 
     var binding: FragmentDetailBinding? = null
-    private val viewModel: DetailFragmentViewModel by viewModels { factoryApp }
+    private val viewModel: DetailFragmentViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,10 +40,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         id?.let { getWeather(it) }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        (activity as MainActivity).appComponent.inject(this)
-        super.onCreate(savedInstanceState)
-    }
     private fun getWeather(id: Int) {
         lifecycleScope.launch {
             viewModel.getWeatherById(id)

@@ -4,6 +4,8 @@ import com.example.web_app.BuildConfig
 import com.example.web_app.data.api.Api
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,6 +20,7 @@ private const val API_KEY = "9e8331105a420290e0619d9769c5dc65"
 private const val QUERY_API_KEY = "appid"
 
 @Module
+@InstallIn(SingletonComponent::class)
 class NetModule{
     @Provides
     @Named("apiKey")

@@ -6,9 +6,12 @@ import com.example.web_app.domain.usecase.GetWeatherByIdUseCase
 import com.example.web_app.domain.usecase.GetWeatherListUseCase
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 class UseCaseModule {
     @Provides
     @Singleton
